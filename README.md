@@ -22,3 +22,5 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser if
 
 4. Thinking about how a user might want to further explore the data, I concluded that multiple filters should be able to be active at once. Therefore I chose to extend the `Selector` class to include this functionality.
   1. After doing this, I realised that a quick way to enable/disable all filters would be easy and followed to implement this.
+
+5. For a user to further explore the data, I felt it would useful to be able to sort the data. I therefore created another instance of the already defined `Selector` class to do this.

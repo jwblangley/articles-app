@@ -22,35 +22,46 @@ class App extends Component {
     return (
       // sectionFilter is part of the state of App
       <div>
-        <Selector
-          name={"Section"}
-          currentValues={this.state.sectionFilter}
-          allValues={uniqueSections}
-          onSelect={(value) => {
-            if (this.state.sectionFilter.has(value)) {
-              if (value === "All") {
-                // When deselecting "All" clear all selections.
-                this.setState({sectionFilter:new Set()});
+        <span>
+          <Selector
+            name="Section"
+            currentValues={this.state.sectionFilter}
+            allValues={new Set(["All", ...uniqueSections])}
+            onSelect={value => {
+              if (this.state.sectionFilter.has(value)) {
+                if (value === "All") {
+                  // When deselecting "All" clear all selections.
+                  this.setState({sectionFilter:new Set()});
+                } else {
+                  // Create a new copy of sectionFilter to update state.
+                  var newSectionFilter = new Set([...this.state.sectionFilter]);
+                  newSectionFilter.delete(value);
+                  this.setState({sectionFilter:newSectionFilter})
+                }
               } else {
-                // Create a new copy of sectionFilter to update state.
-                var newSectionFilter = new Set([...this.state.sectionFilter]);
-                newSectionFilter.delete(value);
-                this.setState({sectionFilter:newSectionFilter})
+                if (value === "All") {
+                  // When deselecting "All" clear all selections.
+                  this.setState({sectionFilter:new Set(["All"])});
+                } else {
+                  // When selecting any other item, deselect "All".
+                  var newSectionFilter = new Set([value, ...this.state.sectionFilter]);
+                  // N.B this returns false if "All" is not selected, but does not crash.
+                  newSectionFilter.delete("All");
+                  this.setState({sectionFilter:newSectionFilter})
+                }
               }
-            } else {
-              if (value === "All") {
-                // When deselecting "All" clear all selections.
-                this.setState({sectionFilter:new Set(["All"])});
-              } else {
-                // When selecting any other item, deselect "All".
-                var newSectionFilter = new Set([value, ...this.state.sectionFilter]);
-                // N.B this returns false if "All" is not selected, but does not crash.
-                newSectionFilter.delete("All");
-                this.setState({sectionFilter:newSectionFilter})
-              }
-            }
-          }}
-        />
+            }}
+          />
+
+          <Selector
+            name="Sort by"
+            currentValues={new Set()}
+            allValues={new Set(["Hello"])}
+            onSelect={value => {
+              console.log(value)
+            }}
+          />
+        </span>
 
         {/*
           Map data to Articles.
@@ -82,14 +93,7 @@ class Selector extends Component {
           onChange={e => this.props.onSelect(e.target.value)}
         >
         <option value="">---Select a filter---</option>
-        <option
-          value="All"
-          className={this.props.currentValues.has("All")?"bold":""}
-        >
-          All
-        </option>
         {
-
           [...this.props.allValues].map(value =>
             <option
               value={value}
