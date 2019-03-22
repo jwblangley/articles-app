@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import BasicSelector from './components/selectors/BasicSelector.js';
 import MultiSelector from './components/selectors/MultiSelector.js';
+import Article from './components/Article.js';
 import './App.css';
 
-// Load in articles JSON
+// Load in articles JSON.
 import data from './articles.json'
 
+// Load in article comparisons.
 import {noComparison, viewsComparison, titleComparison} from './comparisons.js'
-// Load in article comparisons
+// Create sortMap from string to function for efficient lookup.
 const sortMap = new Map([
   ["None", noComparison],
   ["Views: Increasing", viewsComparison],
@@ -79,41 +81,16 @@ class App extends Component {
           Map data to Articles.
           First filter to match sectionFilter (or all if "All" selected),
           then sort by the currently chosen sort function.
-          */}
+        */}
+        <div className="content">
         {data.results
           .filter(article => this.state.sectionFilter.has("All")
             || this.state.sectionFilter.has(article.section))
           .sort(sortMap.get(this.state.sort))
           .map(article => <Article article={article} key={article.url} />)}
+        </div>
       </div>
     );
-  }
-}
-
-
-class Article extends Component {
-  /*
-    props:
-      article: the article data to be rendered :: {
-        title :: string
-        description :: string
-        thumbnail_url :: string
-        url :: string
-        section :: string
-        views :: int
-      }
-  */
-  render() {
-    return (
-      <div>
-        <a href={this.props.article.url} target="_blank"><h1>{this.props.article.title}</h1></a>
-        <h3>{this.props.article.section}</h3>
-        <img src={this.props.article.thumbnail_url} />
-        <p><strong>Views: </strong>{this.props.article.views}</p>
-        <p>{this.props.article.description}</p>
-        <hr/>
-      </div>
-    )
   }
 }
 

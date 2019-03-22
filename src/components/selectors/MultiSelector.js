@@ -15,6 +15,7 @@ class MultiSelector extends Component {
   }
 
   render() {
+    // bind ensures that the function is always run in 'this' context.
     var boundOptionClassName = this.optionClassName.bind(this);
 
     return (

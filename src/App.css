@@ -1,3 +1,78 @@
 .bold {
   font-weight: bold
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.navbar {
+  width: 100vw;
+  margin: 0;
+  padding: 3vh 3vw;
+  background-color: #EE3321;
+  box-sizing: border-box;
+  position: sticky;
+  top:0;
+}
+
+.selector {
+  font-size: 3vmin;
+  padding: 1vmin;
+  color:white;
+  font-weight:bold;
+}
+
+.selector option {
+  font-size: 3vmin;
+}
+
+.selector select {
+  font-size: 3vmin;
+}
+
+.content{
+  width: 100vw;
+  margin: 0;
+  padding: 3vh 3vw;
+  box-sizing: border-box;
+}
+
+.article {
+  padding-bottom: 2vh
+}
+
+.article h1 {
+  padding-bottom: 1.5vh;
+}
+
+.article a {
+  color:inherit;
+}
+
+.articleInfoOuter {
+  padding-bottom: 1.5vh;
+}
+
+.article .articleInfo * {
+  display: inline-block;
+  padding-right: 2vw;
+}
+
+.article .thumbnail {
+  display: inline-block;
+}
+
+.article .thumbnail img {
+  width: 15vw;
+}
+
+.article .description {
+  display: inline-block;
+  width:64vw;
+  padding: 3vh 3vw;
+  box-sizing: border-box;
+  font-size: 1.1em;
+}

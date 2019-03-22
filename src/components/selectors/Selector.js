@@ -12,7 +12,7 @@ class Selector extends Component {
 
   render() {
     return (
-      <span>
+      <span className="selector">
       {this.props.name}:
       <select
         value={this.props.currentValue}

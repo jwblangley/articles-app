@@ -27,6 +27,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser if
 
 6. I noticed the duplication between `Selector` and `MultiSelector` so reduced this with a parent component, `Selector` and two subclasses: `MultiSelector` and `BasicSelector`. These I then refactored into a `components` directory and exported them for use within `App`.
 
+7. Finally, I began to add some simple styling.
 
+In total, including styling I have spent around 4.5-5 hours on this project.
 
 Please note that `articles.json` was generated and supplied by BuzzFeed and uploaded here with their permission.
