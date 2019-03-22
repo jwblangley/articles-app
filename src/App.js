@@ -4,11 +4,24 @@ import './App.css';
 // Load in articles JSON
 import data from './articles.json'
 
+import {noComparison, viewsComparison, titleComparison} from './comparisons.js'
+// Load in article comparisons
+const sortMap = new Map([
+  ["None", noComparison],
+  ["Views: Increasing", viewsComparison],
+  ["Views: Decreasing", (a, b) => -1 * viewsComparison(a, b)],
+  ["Title: Increasing", titleComparison],
+  ["Title: Decreasing", (a, b) => -1 * titleComparison(a, b)]
+]);
+
+
 class App extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      sectionFilter: new Set(["All"])
+      sectionFilter: new Set(["All"]),
+      sort: "None"
     }
   }
 
@@ -23,7 +36,7 @@ class App extends Component {
       // sectionFilter is part of the state of App
       <div>
         <span>
-          <Selector
+          <MultiSelector
             name="Section"
             currentValues={this.state.sectionFilter}
             allValues={new Set(["All", ...uniqueSections])}
@@ -55,33 +68,35 @@ class App extends Component {
 
           <Selector
             name="Sort by"
-            currentValues={new Set()}
-            allValues={new Set(["Hello"])}
+            currentValue={this.state.sort}
+            allValues={new Set([...sortMap.keys()])}
             onSelect={value => {
-              console.log(value)
+              this.setState({sort:value})
             }}
           />
         </span>
 
         {/*
           Map data to Articles.
-          First filter to match sectionFilter (or all if none selected).
+          First filter to match sectionFilter (or all if "All" selected),
+          then sort by the currently chosen sort function.
           */}
         {data.results
           .filter(article => this.state.sectionFilter.has("All")
             || this.state.sectionFilter.has(article.section))
+          .sort(sortMap.get(this.state.sort))
           .map(article => <Article article={article} key={article.url} />)}
       </div>
     );
   }
 }
 
-class Selector extends Component {
+class MultiSelector extends Component {
   /*
     props:
       name: the text to put in the label :: string
       currentValues: the values the Selector is currently holding :: Set
-      allValues: the values of all possible items to select :: Set
+      allValues: the values of all possible items to select :: Set(string)
       onSelect: the function to call once a selection has been made :: string -> ()
   */
   render() {
@@ -92,13 +107,46 @@ class Selector extends Component {
           value={this.props.currentValues}
           onChange={e => this.props.onSelect(e.target.value)}
         >
-        <option value="">---Select a filter---</option>
+        <option value="">---Select---</option>
         {
           [...this.props.allValues].map(value =>
             <option
               value={value}
               key={value}
               className={this.props.currentValues.has(value)?"bold":""}
+            >
+              {value}
+            </option>
+          )
+        }
+        </select>
+      </span>
+    )
+  }
+}
+
+class Selector extends Component {
+  /*
+    props:
+      name: the text to put in the label :: string
+      currentValue: the value the Selector is currently holding :: string
+      allValues: the values of all possible items to select :: Set(string);
+      onSelect: the function to call once a selection has been made :: string -> ()
+  */
+  render() {
+    return (
+      <span>
+        {this.props.name}:
+        <select id='section-select'
+          value={this.props.currentValue}
+          onChange={e => this.props.onSelect(e.target.value)}
+        >
+        <option value="">---Select---</option>
+        {
+          [...this.props.allValues].map(value =>
+            <option
+              value={value}
+              key={value}
             >
               {value}
             </option>
