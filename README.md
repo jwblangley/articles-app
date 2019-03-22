@@ -24,3 +24,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser if
   1. After doing this, I realised that a quick way to enable/disable all filters would be easy and followed to implement this.
 
 5. For a user to further explore the data, I felt it would useful to be able to sort the data. I therefore created another class similar to `MultiSelector` to do this. The comparison functions are stored in a separate file and imported into the App. There they are stored as a constant Map to be accessed as needed.
+
+6. I noticed the duplication between `Selector` and `MultiSelector` so reduced this with a parent component, `Selector` and two subclasses: `MultiSelector` and `BasicSelector`. These I then refactored into a `components` directory and exported them for use within `App`.
+
+
+
+Please note that `articles.json` was generated and supplied by BuzzFeed and uploaded here with their permission.

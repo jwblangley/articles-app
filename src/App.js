@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import BasicSelector from './components/selectors/BasicSelector.js';
+import MultiSelector from './components/selectors/MultiSelector.js';
 import './App.css';
 
 // Load in articles JSON
@@ -66,7 +68,7 @@ class App extends Component {
             }}
           />
 
-          <Selector
+          <BasicSelector
             name="Sort by"
             currentValue={this.state.sort}
             allValues={new Set([...sortMap.keys()])}
@@ -91,72 +93,6 @@ class App extends Component {
   }
 }
 
-class MultiSelector extends Component {
-  /*
-    props:
-      name: the text to put in the label :: string
-      currentValues: the values the Selector is currently holding :: Set
-      allValues: the values of all possible items to select :: Set(string)
-      onSelect: the function to call once a selection has been made :: string -> ()
-  */
-  render() {
-    return (
-      <span>
-        {this.props.name}:
-        <select id='section-select'
-          value={this.props.currentValues}
-          onChange={e => this.props.onSelect(e.target.value)}
-        >
-        <option value="">---Select---</option>
-        {
-          [...this.props.allValues].map(value =>
-            <option
-              value={value}
-              key={value}
-              className={this.props.currentValues.has(value)?"bold":""}
-            >
-              {value}
-            </option>
-          )
-        }
-        </select>
-      </span>
-    )
-  }
-}
-
-class Selector extends Component {
-  /*
-    props:
-      name: the text to put in the label :: string
-      currentValue: the value the Selector is currently holding :: string
-      allValues: the values of all possible items to select :: Set(string);
-      onSelect: the function to call once a selection has been made :: string -> ()
-  */
-  render() {
-    return (
-      <span>
-        {this.props.name}:
-        <select id='section-select'
-          value={this.props.currentValue}
-          onChange={e => this.props.onSelect(e.target.value)}
-        >
-        <option value="">---Select---</option>
-        {
-          [...this.props.allValues].map(value =>
-            <option
-              value={value}
-              key={value}
-            >
-              {value}
-            </option>
-          )
-        }
-        </select>
-      </span>
-    )
-  }
-}
 
 class Article extends Component {
   /*
@@ -176,6 +112,7 @@ class Article extends Component {
         <a href={this.props.article.url} target="_blank"><h1>{this.props.article.title}</h1></a>
         <h3>{this.props.article.section}</h3>
         <img src={this.props.article.thumbnail_url} />
+        <p><strong>Views: </strong>{this.props.article.views}</p>
         <p>{this.props.article.description}</p>
         <hr/>
       </div>
