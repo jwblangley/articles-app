@@ -17,7 +17,7 @@ class App extends Component {
     Convert the sections to a set to remove duplicates and back to an array for usage
     N.B calling this every render does not affect performance due to React data diff.
     */
-    const uniqueSections = [...new Set(data.results.map(article => article.section))];
+    const uniqueSections = new Set(data.results.map(article => article.section));
 
     return (
       // sectionFilter is part of the state of App
@@ -38,7 +38,16 @@ class App extends Component {
                 this.setState({sectionFilter:newSectionFilter})
               }
             } else {
-              this.setState({sectionFilter:new Set([value, ...this.state.sectionFilter])})
+              if (value === "All") {
+                // When deselecting "All" clear all selections.
+                this.setState({sectionFilter:new Set(["All"])});
+              } else {
+                // When selecting any other item, deselect "All".
+                var newSectionFilter = new Set([value, ...this.state.sectionFilter]);
+                // N.B this returns false if "All" is not selected, but does not crash.
+                newSectionFilter.delete("All");
+                this.setState({sectionFilter:newSectionFilter})
+              }
             }
           }}
         />
@@ -57,6 +66,13 @@ class App extends Component {
 }
 
 class Selector extends Component {
+  /*
+    props:
+      name: the text to put in the label :: string
+      currentValues: the values the Selector is currently holding :: Set
+      allValues: the values of all possible items to select :: Set
+      onSelect: the function to call once a selection has been made :: string -> ()
+  */
   render() {
     return (
       <span>
@@ -73,7 +89,8 @@ class Selector extends Component {
           All
         </option>
         {
-          this.props.allValues.map(value =>
+
+          [...this.props.allValues].map(value =>
             <option
               value={value}
               key={value}
@@ -90,12 +107,24 @@ class Selector extends Component {
 }
 
 class Article extends Component {
+  /*
+    props:
+      article: the article data to be rendered :: {
+        title :: string
+        description :: string
+        thumbnail_url :: string
+        url :: string
+        section :: string
+        views :: int
+      }
+  */
   render() {
     return (
       <div>
         <a href={this.props.article.url} target="_blank"><h1>{this.props.article.title}</h1></a>
         <h3>{this.props.article.section}</h3>
         <img src={this.props.article.thumbnail_url} />
+        <p>{this.props.article.description}</p>
         <hr/>
       </div>
     )
