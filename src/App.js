@@ -35,33 +35,30 @@ class App extends Component {
     const uniqueSections = new Set(data.results.map(article => article.section));
 
     return (
-      // sectionFilter is part of the state of App
+      // sectionFilter and sort are part of the state of App
       <div>
-        <span>
+        <div className = "navbar">
           <MultiSelector
             name="Section"
             currentValues={this.state.sectionFilter}
             allValues={new Set(["All", ...uniqueSections])}
             onSelect={value => {
               if (this.state.sectionFilter.has(value)) {
-                if (value === "All") {
-                  // When deselecting "All" clear all selections.
-                  this.setState({sectionFilter:new Set()});
-                } else {
-                  // Create a new copy of sectionFilter to update state.
-                  var newSectionFilter = new Set([...this.state.sectionFilter]);
-                  newSectionFilter.delete(value);
-                  this.setState({sectionFilter:newSectionFilter})
-                }
+                // N.B It is not possible to deselect all as this is run on change.
+                // Create a new copy of sectionFilter to update state.
+                var newSectionFilter = new Set([...this.state.sectionFilter]);
+                newSectionFilter.delete(value);
+                this.setState({sectionFilter:newSectionFilter})
               } else {
-                if (value === "All") {
-                  // When deselecting "All" clear all selections.
+                if (value.valueOf() === new String("All").valueOf()) {
+                  // When selecting "All" clear all other selections.
                   this.setState({sectionFilter:new Set(["All"])});
                 } else {
                   // When selecting any other item, deselect "All".
                   var newSectionFilter = new Set([value, ...this.state.sectionFilter]);
                   // N.B this returns false if "All" is not selected, but does not crash.
                   newSectionFilter.delete("All");
+
                   this.setState({sectionFilter:newSectionFilter})
                 }
               }
@@ -76,7 +73,7 @@ class App extends Component {
               this.setState({sort:value})
             }}
           />
-        </span>
+        </div>
 
         {/*
           Map data to Articles.

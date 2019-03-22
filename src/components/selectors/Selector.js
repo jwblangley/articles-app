@@ -11,22 +11,13 @@ class Selector extends Component {
   */
 
   render() {
-    var selectString = "---Select---";
     return (
       <span>
       {this.props.name}:
       <select
         value={this.props.currentValue}
-        onChange={e => {
-            // Do not update if the header option is chosen.
-            var selectedText = e.target.options[e.target.selectedIndex].text;
-            if (selectedText.valueOf() != selectString.valueOf()) {
-              this.props.onSelect(e.target.value);
-            }
-          }
-        }
+        onChange={e => this.props.onSelect(e.target.value)}
       >
-      <option value={selectString}>{selectString}</option>
       {
         [...this.props.allValues].map(value =>
           <option
